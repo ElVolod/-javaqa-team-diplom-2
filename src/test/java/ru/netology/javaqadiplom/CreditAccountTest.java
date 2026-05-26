@@ -17,4 +17,38 @@ public class CreditAccountTest {
 
         Assertions.assertEquals(3_000, account.getBalance());
     }
+    @Test
+    public void shouldNotChangeBalanceIfPayOverLimit() {
+        CreditAccount account = new CreditAccount(0, 100, 15);
+        account.pay(150);
+        Assertions.assertEquals(0, account.getBalance());
+    }
+
+    @Test
+    public void shouldPayEqualsToCreditLimit() {
+        CreditAccount account = new CreditAccount(0, 100, 15);
+        boolean result = account.pay(100);
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    public void shouldAddAmountToCurrentBalance() {
+        CreditAccount account = new CreditAccount(200, 100, 15);
+        account.add(300);
+        Assertions.assertEquals(500, account.getBalance());
+    }
+
+    @Test
+    public void shouldNotCalculatePercentOnPositiveBalance() {
+        CreditAccount account = new CreditAccount(200, 100, 15);
+        int percent = account.yearChange();
+        Assertions.assertEquals(0, percent);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenCreditLimitIsNegative() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            new CreditAccount(0, -100, 15);
+        });
+    }
 }
