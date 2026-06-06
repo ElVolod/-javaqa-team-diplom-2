@@ -22,7 +22,27 @@ public class SavingAccount extends Account {
     public SavingAccount(int initialBalance, int minBalance, int maxBalance, int rate) {
         if (rate < 0) {
             throw new IllegalArgumentException(
-              "Накопительная ставка не может быть отрицательной, а у вас: " + rate
+                    "Накопительная ставка не может быть отрицательной, а у вас: " + rate
+            );
+        }
+        if (minBalance < 0) {
+            throw new IllegalArgumentException(
+                    "Минимальный баланс не может быть отрицательным, а у вас: " + minBalance
+            );
+        }
+        if (minBalance > maxBalance) {
+            throw new IllegalArgumentException(
+                    "Минимальный баланс не может быть больше максимального, а у вас min: " + minBalance + " max: " + maxBalance
+            );
+        }
+        if (initialBalance < minBalance) {
+            throw new IllegalArgumentException(
+                    "Начальный баланс не может быть меньше минимального, а у вас: " + initialBalance
+            );
+        }
+        if (initialBalance > maxBalance) {
+            throw new IllegalArgumentException(
+                    "Начальный баланс не может быть больше максимального, а у вас: " + initialBalance
             );
         }
         this.balance = initialBalance;
@@ -45,12 +65,11 @@ public class SavingAccount extends Account {
         if (amount <= 0) {
             return false;
         }
-        balance = balance - amount;
-        if (balance > minBalance) {
-            return true;
-        } else {
+        if (balance - amount < minBalance) {
             return false;
         }
+        balance = balance - amount;
+        return true;
     }
 
     /**
@@ -61,20 +80,17 @@ public class SavingAccount extends Account {
      * завершиться вернув false и ничего не поменяв на счёте.
      * @param amount - сумма пополнения
      * @return true если операция прошла успешно, false иначе.
-     * @param amount
-     * @return
      */
     @Override
     public boolean add(int amount) {
         if (amount <= 0) {
             return false;
         }
-        if (balance + amount < maxBalance) {
-            balance = amount;
-            return true;
-        } else {
+        if (balance + amount > maxBalance) {
             return false;
         }
+        balance = balance + amount;
+        return true;
     }
 
     /**
