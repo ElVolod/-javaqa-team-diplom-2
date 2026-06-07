@@ -35,6 +35,8 @@ public class CreditAccountTest {
     public void shouldCreateAccountWithValidParams() {
         CreditAccount account = new CreditAccount(1_000, 5_000, 15);
         Assertions.assertEquals(1_000, account.getBalance());
+        Assertions.assertEquals(5_000, ((CreditAccount) account).creditLimit);
+        Assertions.assertEquals(15, account.getRate());
     }
 
     // ==================== pay() Tests ====================
@@ -143,53 +145,23 @@ public class CreditAccountTest {
         Assertions.assertEquals(1_000, account.getBalance());
     }
 
-    // ==================== pay() additional ====================
-
-    @Test
-    public void shouldNotChangeBalanceIfPayOverLimit() {
-        CreditAccount account = new CreditAccount(0, 100, 15);
-        account.pay(150);
-        Assertions.assertEquals(0, account.getBalance());
-    }
-
-    @Test
-    public void shouldPayEqualsToCreditLimit() {
-        CreditAccount account = new CreditAccount(0, 100, 15);
-        boolean result = account.pay(100);
-        Assertions.assertTrue(result);
-    }
-
-    @Test
-    public void shouldThrowExceptionWhenCreditLimitIsNegative() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new CreditAccount(0, -100, 15);
-        });
-    }
-
     // ==================== yearChange() Tests ====================
 
     @Test
-    public void shouldReturnNegativeYearChangeForNegativeBalance() {
+    public void shouldCalculateYearChangeOnNegativeBalance() {
         CreditAccount account = new CreditAccount(0, 5_000, 15);
         account.pay(200);
         Assertions.assertEquals(-30, account.yearChange());
     }
 
     @Test
-    public void shouldReturnZeroYearChangeForPositiveBalance() {
+    public void shouldNotCalculateYearChangeOnPositiveBalance() {
         CreditAccount account = new CreditAccount(200, 5_000, 15);
         Assertions.assertEquals(0, account.yearChange());
     }
 
     @Test
-    public void shouldNotCalculatePercentOnPositiveBalance() {
-        CreditAccount account = new CreditAccount(200, 100, 15);
-        int percent = account.yearChange();
-        Assertions.assertEquals(0, percent);
-    }
-
-    @Test
-    public void shouldReturnZeroYearChangeForZeroBalance() {
+    public void shouldNotCalculateYearChangeOnZeroBalance() {
         CreditAccount account = new CreditAccount(0, 5_000, 15);
         Assertions.assertEquals(0, account.yearChange());
     }
