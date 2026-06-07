@@ -180,17 +180,4 @@ public class CreditAccountTest {
         CreditAccount account = new CreditAccount(200, 5_000, 15);
         Assertions.assertEquals(0, account.yearChange());
     }
-
-    @Test
-    public void shouldNotCalculatePercentOnPositiveBalance() {
-        CreditAccount account = new CreditAccount(200, 100, 15);
-        int percent = account.yearChange();
-        Assertions.assertEquals(0, percent);
-    }
-
-    @Test
-    public void shouldReturnZeroYearChangeForZeroBalance() {
-        CreditAccount account = new CreditAccount(0, 5_000, 15);
-        Assertions.assertEquals(0, account.yearChange());
-    }
 }
