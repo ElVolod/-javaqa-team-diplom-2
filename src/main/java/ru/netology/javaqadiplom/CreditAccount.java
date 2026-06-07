@@ -87,4 +87,4 @@ public class CreditAccount extends Account {
         }
         return balance * rate / 100;
     }
-}
+} 
